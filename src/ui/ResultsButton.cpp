@@ -1,4 +1,5 @@
 #include "TakeMeToResults.hpp"
+#include "Classes/CachedViewControllers.hpp"
 
 #include "UnityEngine/Object.hpp"
 #include "UnityEngine/UI/Button.hpp"
@@ -9,54 +10,46 @@
 #include "HMUI/ViewController_AnimationDirection.hpp"
 #include "HMUI/ViewController_AnimationType.hpp"
 
-#include "GlobalNamespace/SinglePlayerLevelSelectionFlowCoordinator.hpp"
+#include "GlobalNamespace/SoloFreePlayFlowCoordinator.hpp"
 
 using namespace GlobalNamespace;
 using namespace HMUI;
 
-auto CachedViewControllers = TakeMeToResults::_CachedViewControllers();
 UnityEngine::UI::Button *resultsButton;
-
 UnityEngine::UI::Button *CreateResultsButton(ViewController *self)
 {
     auto resultsButton = QuestUI::BeatSaberUI::CreateUIButton(self->get_transform(), "View Results", [](){
-        auto levelSelectFlowCoord = UnityEngine::Object::FindObjectOfType<SinglePlayerLevelSelectionFlowCoordinator *>();
-        levelSelectFlowCoord->PresentViewController(CachedViewControllers->topViewController, NULL, ViewController::AnimationDirection::Vertical, false); });
+        auto levelSelectFlowCoord = UnityEngine::Object::FindObjectOfType<SoloFreePlayFlowCoordinator *>();
+        levelSelectFlowCoord->PresentViewController(CachedViewControllers::topViewController, ShowOtherViewControllers(), ViewController::AnimationDirection::Vertical, false); });
     return resultsButton;
 }
 
-void ShowOtherViewControllers()
+System::Action *ShowOtherViewControllers()
 {
-    auto levelSelectFlowCoord = UnityEngine::Object::FindObjectOfType<SinglePlayerLevelSelectionFlowCoordinator *>();
-    levelSelectFlowCoord->SetLeftScreenViewController(CachedViewControllers->leftScreenViewController, ViewController::AnimationType::In);
-    levelSelectFlowCoord->SetRightScreenViewController(CachedViewControllers->rightScreenViewController, ViewController::AnimationType::In);
-    levelSelectFlowCoord->SetTopScreenViewController(CachedViewControllers->topScreenViewController, ViewController::AnimationType::In);
-    levelSelectFlowCoord->SetBottomScreenViewController(CachedViewControllers->bottomScreenViewController, ViewController::AnimationType::In);
+    auto levelSelectFlowCoord = UnityEngine::Object::FindObjectOfType<SoloFreePlayFlowCoordinator *>();
+    levelSelectFlowCoord->SetLeftScreenViewController(CachedViewControllers::leftScreenViewController, ViewController::AnimationType::In);
+    levelSelectFlowCoord->SetRightScreenViewController(CachedViewControllers::rightScreenViewController, ViewController::AnimationType::In);
+    levelSelectFlowCoord->SetTopScreenViewController(CachedViewControllers::topScreenViewController, ViewController::AnimationType::In);
+    levelSelectFlowCoord->SetBottomScreenViewController(CachedViewControllers::bottomScreenViewController, ViewController::AnimationType::In);
 }
 
-MAKE_HOOK_MATCH(levelSelectDidActivate, &SinglePlayerLevelSelectionFlowCoordinator::SinglePlayerLevelSelectionFlowCoordinatorDidActivate, void, SinglePlayerLevelSelectionFlowCoordinator *self, bool firstActivation, bool addedToHierarchy)
+MAKE_HOOK_MATCH(levelSelectDidActivate, &SoloFreePlayFlowCoordinator::SinglePlayerLevelSelectionFlowCoordinatorDidActivate, void, SoloFreePlayFlowCoordinator *self, bool firstActivation, bool addedToHierarchy)
 {
-    auto mainFlowCoord = UnityEngine::Object::FindObjectOfType<MainFlowCoordinator *>();
     if (firstActivation)
     {
-        resultsButton = CreateResultsButton(mainFlowCoord->get_topViewController());
-        getLogger().info("Create button.");
+        resultsButton = CreateResultsButton(self->get_topViewController());
         resultsButton->set_interactable(false);
-        getLogger().info("Make button unable to be pressed.");
     }
-    else if (!firstActivation && CachedViewControllers)
+    else if (!firstActivation && CachedViewControllers::topViewController)
     {
         resultsButton->set_interactable(true);
-        getLogger().info("Set button interactable to true.");
     }
-    else if (!firstActivation && !CachedViewControllers)
+    else if (!firstActivation && !CachedViewControllers::topViewController)
     {
         resultsButton->set_interactable(false);
-        getLogger().info("Also set button interactable to false but different lol.");
     }
 
     levelSelectDidActivate(self, firstActivation, addedToHierarchy);
-    getLogger().info("Call level fucker idk");
 }
 
 void TakeMeToResults::HookInstallers::SinglePlayerLevelSelectionFlowCoordinator(Logger &logger) {

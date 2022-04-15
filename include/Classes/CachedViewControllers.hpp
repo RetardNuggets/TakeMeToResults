@@ -9,11 +9,10 @@ using namespace HMUI;
 class CachedViewControllers
 {
     public:
-    ViewController *leftScreenViewController;
-    ViewController *rightScreenViewController;
-    ViewController *topScreenViewController;
-    ViewController *bottomScreenViewController;
-    ViewController *topViewController;
-    CachedViewControllers();
-    void Init();
+    static ViewController *leftScreenViewController;
+    static ViewController *rightScreenViewController;
+    static ViewController *topScreenViewController;
+    static ViewController *bottomScreenViewController;
+    static ViewController *topViewController;
+    static void Init();
 };

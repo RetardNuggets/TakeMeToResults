@@ -5,19 +5,11 @@
 
 using namespace GlobalNamespace;
 
-CachedViewControllers *_ReturnCachedViewControllers;
 MAKE_HOOK_MATCH(_ResultsViewController, &ResultsViewController::DidActivate, void, ResultsViewController *self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
 {
-    _ReturnCachedViewControllers = new CachedViewControllers();
-    getLogger().info("Created new CachedViewControllers type");
+    CachedViewControllers::Init();
     _ResultsViewController(self, firstActivation, addedToHierarchy, screenSystemEnabling);
-    getLogger().info("Called resultviewcontroller");
 }
-
-CachedViewControllers *TakeMeToResults::_CachedViewControllers()
-    {
-        return _ReturnCachedViewControllers;
-    }
 
 void TakeMeToResults::HookInstallers::ResultsViewController(Logger &logger)
 {

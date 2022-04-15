@@ -8,14 +8,10 @@ using namespace UnityEngine;
 
 void CachedViewControllers::Init() {
     auto mainFlowCoordinator = Object::FindObjectOfType<MainFlowCoordinator *>();
-    this->topViewController = mainFlowCoordinator->get_topViewController();
-    this->bottomScreenViewController = mainFlowCoordinator->bottomScreenViewController;
-    this->topScreenViewController = mainFlowCoordinator->topScreenViewController;
-    this->rightScreenViewController = mainFlowCoordinator->rightScreenViewController;
-    this->leftScreenViewController = mainFlowCoordinator->leftScreenViewController;
-}
-
-CachedViewControllers::CachedViewControllers()
-{
-    CachedViewControllers::Init();
+    auto deepestChildFlowCoordinator = mainFlowCoordinator->YoungestChildFlowCoordinatorOrSelf();
+    CachedViewControllers::topViewController = deepestChildFlowCoordinator->get_topViewController();
+    CachedViewControllers::bottomScreenViewController = deepestChildFlowCoordinator->bottomScreenViewController;
+    CachedViewControllers::topScreenViewController = deepestChildFlowCoordinator->topScreenViewController;
+    CachedViewControllers::rightScreenViewController = deepestChildFlowCoordinator->rightScreenViewController;
+    CachedViewControllers::leftScreenViewController = deepestChildFlowCoordinator->leftScreenViewController;
 }
