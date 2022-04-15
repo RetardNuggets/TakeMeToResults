@@ -8,6 +8,7 @@ namespace TakeMeToResults
     namespace HookInstallers
     {
         void ResultsViewController(Logger &logger);
+        void SinglePlayerLevelSelectionFlowCoordinator(Logger &logger);
     }
     CachedViewControllers *_CachedViewControllers();
 }

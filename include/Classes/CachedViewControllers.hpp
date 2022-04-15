@@ -15,4 +15,5 @@ class CachedViewControllers
     ViewController *bottomScreenViewController;
     ViewController *topViewController;
     CachedViewControllers();
+    void Init();
 };
