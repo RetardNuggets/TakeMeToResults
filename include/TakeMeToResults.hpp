@@ -8,5 +8,6 @@ namespace TakeMeToResults
     {
         void ResultsViewController(Logger &logger);
         void SinglePlayerLevelSelectionFlowCoordinator(Logger &logger);
+        void ContinueButtonPressed(Logger &logger);
     }
 }

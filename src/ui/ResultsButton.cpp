@@ -11,8 +11,10 @@
 #include "HMUI/ViewController.hpp"
 #include "HMUI/ViewController_AnimationDirection.hpp"
 #include "HMUI/ViewController_AnimationType.hpp"
+#include "HMUI/TitleViewController.hpp"
 
 #include "GlobalNamespace/SoloFreePlayFlowCoordinator.hpp"
+#include "GlobalNamespace/ResultsViewController.hpp"
 
 using namespace GlobalNamespace;
 using namespace HMUI;
@@ -31,7 +33,8 @@ MAKE_HOOK_MATCH(levelSelectDidActivate, &SoloFreePlayFlowCoordinator::SinglePlay
 {
     if (firstActivation)
     {
-        auto SelectionViewController = self->get_topViewController();
+        CachedViewControllers::Clear();
+        auto SelectionViewController = UnityEngine::Object::FindObjectOfType<TitleViewController *>();
         resultsButton = QuestUI::BeatSaberUI::CreateUIButton(SelectionViewController->get_transform(), "View Results", []()
         {
             auto FreePlayCoord = UnityEngine::Object::FindObjectOfType<SoloFreePlayFlowCoordinator *>();
@@ -42,15 +45,21 @@ MAKE_HOOK_MATCH(levelSelectDidActivate, &SoloFreePlayFlowCoordinator::SinglePlay
         resultsButton->set_interactable(false);
         getLogger().info("Set View Results UIButton to be uninteractable.");
     }
-    else if (!firstActivation && CachedViewControllers::topViewController)
-    {
-        resultsButton->set_interactable(true);
-        getLogger().info("Set View Results UIButton to be interactable.");
-    }
     
     levelSelectDidActivate(self, firstActivation, addedToHierarchy);
 }
 
+MAKE_HOOK_MATCH(continueButtonPressed, &ResultsViewController::ContinueButtonPressed, void, ResultsViewController *self) {
+    resultsButton->set_interactable(true);
+    getLogger().info("Set View Results UIButton to be interactable.");
+
+    continueButtonPressed(self);
+}
+
 void TakeMeToResults::HookInstallers::SinglePlayerLevelSelectionFlowCoordinator(Logger &logger) {
     INSTALL_HOOK(logger, levelSelectDidActivate);
+}
+
+void TakeMeToResults::HookInstallers::ContinueButtonPressed(Logger &logger) {
+    INSTALL_HOOK(logger, continueButtonPressed);
 }

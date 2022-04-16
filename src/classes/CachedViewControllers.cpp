@@ -21,3 +21,11 @@ void CachedViewControllers::Init() {
     CachedViewControllers::rightScreenViewController = deepestChildFlowCoordinator->rightScreenViewController;
     CachedViewControllers::leftScreenViewController = deepestChildFlowCoordinator->leftScreenViewController;
 }
+
+void CachedViewControllers::Clear() {
+    CachedViewControllers::topViewController = nullptr;
+    CachedViewControllers::bottomScreenViewController = nullptr;
+    CachedViewControllers::topScreenViewController = nullptr;
+    CachedViewControllers::rightScreenViewController = nullptr;
+    CachedViewControllers::leftScreenViewController = nullptr;
+}

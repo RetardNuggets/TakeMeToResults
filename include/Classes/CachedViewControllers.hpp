@@ -15,4 +15,5 @@ class CachedViewControllers
     static ViewController *bottomScreenViewController;
     static ViewController *topViewController;
     static void Init();
+    static void Clear();
 };
