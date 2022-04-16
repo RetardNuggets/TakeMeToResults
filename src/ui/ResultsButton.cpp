@@ -5,6 +5,7 @@
 
 #include "UnityEngine/Object.hpp"
 #include "UnityEngine/UI/Button.hpp"
+#include "UnityEngine/RectTransform.hpp"
 
 #include "questui/shared/BeatSaberUI.hpp"
 
@@ -41,7 +42,10 @@ MAKE_HOOK_MATCH(levelSelectDidActivate, &SoloFreePlayFlowCoordinator::SinglePlay
             auto SoloFreePlayCoordinator = FreePlayCoord->YoungestChildFlowCoordinatorOrSelf();
             SoloFreePlayCoordinator->PresentViewController(CachedViewControllers::topViewController, il2cpp_utils::MakeDelegate<System::Action*>((std::function<void()>) [] { ShowOtherViewControllers(); }), ViewController::AnimationDirection::Vertical, false);
         });
-        getLogger().info("Created View Results UIButton");
+        getLogger().info("Created View Results UIButton.");
+        auto rect = reinterpret_cast<UnityEngine::RectTransform *>(resultsButton->get_transform());
+        rect->set_anchoredPosition({30, -3.5});
+        getLogger().info("Set anchoredPosition for View Results UIButton.");
         resultsButton->set_interactable(false);
         getLogger().info("Set View Results UIButton to be uninteractable.");
     }
