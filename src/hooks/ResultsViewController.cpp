@@ -8,6 +8,7 @@ using namespace GlobalNamespace;
 MAKE_HOOK_MATCH(_ResultsViewController, &ResultsViewController::DidActivate, void, ResultsViewController *self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
 {
     CachedViewControllers::Init();
+    getLogger().info("Cached view controllers.");
     _ResultsViewController(self, firstActivation, addedToHierarchy, screenSystemEnabling);
 }
 

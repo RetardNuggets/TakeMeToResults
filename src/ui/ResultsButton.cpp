@@ -1,6 +1,8 @@
 #include "TakeMeToResults.hpp"
 #include "Classes/CachedViewControllers.hpp"
 
+#include "System/Action.hpp"
+
 #include "UnityEngine/Object.hpp"
 #include "UnityEngine/UI/Button.hpp"
 
@@ -15,16 +17,7 @@
 using namespace GlobalNamespace;
 using namespace HMUI;
 
-UnityEngine::UI::Button *resultsButton;
-UnityEngine::UI::Button *CreateResultsButton(ViewController *self)
-{
-    auto resultsButton = QuestUI::BeatSaberUI::CreateUIButton(self->get_transform(), "View Results", [](){
-        auto levelSelectFlowCoord = UnityEngine::Object::FindObjectOfType<SoloFreePlayFlowCoordinator *>();
-        levelSelectFlowCoord->PresentViewController(CachedViewControllers::topViewController, ShowOtherViewControllers(), ViewController::AnimationDirection::Vertical, false); });
-    return resultsButton;
-}
-
-System::Action *ShowOtherViewControllers()
+void ShowOtherViewControllers()
 {
     auto levelSelectFlowCoord = UnityEngine::Object::FindObjectOfType<SoloFreePlayFlowCoordinator *>();
     levelSelectFlowCoord->SetLeftScreenViewController(CachedViewControllers::leftScreenViewController, ViewController::AnimationType::In);
@@ -33,22 +26,28 @@ System::Action *ShowOtherViewControllers()
     levelSelectFlowCoord->SetBottomScreenViewController(CachedViewControllers::bottomScreenViewController, ViewController::AnimationType::In);
 }
 
+UnityEngine::UI::Button *resultsButton;
 MAKE_HOOK_MATCH(levelSelectDidActivate, &SoloFreePlayFlowCoordinator::SinglePlayerLevelSelectionFlowCoordinatorDidActivate, void, SoloFreePlayFlowCoordinator *self, bool firstActivation, bool addedToHierarchy)
 {
     if (firstActivation)
     {
-        resultsButton = CreateResultsButton(self->get_topViewController());
+        auto SelectionViewController = self->get_topViewController();
+        resultsButton = QuestUI::BeatSaberUI::CreateUIButton(SelectionViewController->get_transform(), "View Results", []()
+        {
+            auto FreePlayCoord = UnityEngine::Object::FindObjectOfType<SoloFreePlayFlowCoordinator *>();
+            auto SoloFreePlayCoordinator = FreePlayCoord->YoungestChildFlowCoordinatorOrSelf();
+            SoloFreePlayCoordinator->PresentViewController(CachedViewControllers::topViewController, il2cpp_utils::MakeDelegate<System::Action*>((std::function<void()>) [] { ShowOtherViewControllers(); }), ViewController::AnimationDirection::Vertical, false);
+        });
+        getLogger().info("Created View Results UIButton");
         resultsButton->set_interactable(false);
+        getLogger().info("Set View Results UIButton to be uninteractable.");
     }
     else if (!firstActivation && CachedViewControllers::topViewController)
     {
         resultsButton->set_interactable(true);
+        getLogger().info("Set View Results UIButton to be interactable.");
     }
-    else if (!firstActivation && !CachedViewControllers::topViewController)
-    {
-        resultsButton->set_interactable(false);
-    }
-
+    
     levelSelectDidActivate(self, firstActivation, addedToHierarchy);
 }
 

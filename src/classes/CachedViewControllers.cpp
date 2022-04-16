@@ -6,6 +6,12 @@
 using namespace GlobalNamespace;
 using namespace UnityEngine;
 
+ViewController *CachedViewControllers::topViewController;
+ViewController *CachedViewControllers::bottomScreenViewController;
+ViewController *CachedViewControllers::topScreenViewController;
+ViewController *CachedViewControllers::rightScreenViewController;
+ViewController *CachedViewControllers::leftScreenViewController;
+
 void CachedViewControllers::Init() {
     auto mainFlowCoordinator = Object::FindObjectOfType<MainFlowCoordinator *>();
     auto deepestChildFlowCoordinator = mainFlowCoordinator->YoungestChildFlowCoordinatorOrSelf();
