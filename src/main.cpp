@@ -34,7 +34,7 @@ extern "C" void load()
 
     getLogger().info("Installing hooks...");
     TakeMeToResults::HookInstallers::ResultsViewController(getLogger());
-    TakeMeToResults::HookInstallers::SinglePlayerLevelSelectionFlowCoordinator(getLogger());
+    TakeMeToResults::HookInstallers::PlatformLeaderboardViewController(getLogger());
     TakeMeToResults::HookInstallers::ContinueButtonPressed(getLogger());
     getLogger().info("Installed all hooks!");
 }
