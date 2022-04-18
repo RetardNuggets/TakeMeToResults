@@ -5,14 +5,14 @@
 
 using namespace GlobalNamespace;
 
-MAKE_HOOK_MATCH(_ResultsViewController, &ResultsViewController::DidActivate, void, ResultsViewController *self, bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling)
+MAKE_HOOK_MATCH(CacheViewControllers, &ResultsViewController::ContinueButtonPressed, void, ResultsViewController *self)
 {
     CachedViewControllers::Init();
     getLogger().info("Cached view controllers.");
-    _ResultsViewController(self, firstActivation, addedToHierarchy, screenSystemEnabling);
+    CacheViewControllers(self);
 }
 
-void TakeMeToResults::HookInstallers::ResultsViewController(Logger &logger)
+void TakeMeToResults::HookInstallers::ResultsViewController_ContinueButtonPressed(Logger &logger)
 {
-    INSTALL_HOOK(logger, _ResultsViewController);
+    INSTALL_HOOK(logger, CacheViewControllers);
 }

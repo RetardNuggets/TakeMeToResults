@@ -33,8 +33,8 @@ extern "C" void load()
     QuestUI::Init();
 
     getLogger().info("Installing hooks...");
-    TakeMeToResults::HookInstallers::ResultsViewController(getLogger());
+    TakeMeToResults::HookInstallers::ResultsViewController_ContinueButtonPressed(getLogger());
     TakeMeToResults::HookInstallers::PlatformLeaderboardViewController(getLogger());
-    TakeMeToResults::HookInstallers::ContinueButtonPressed(getLogger());
+    TakeMeToResults::HookInstallers::ResultsViewController_DidDeactivate(getLogger());
     getLogger().info("Installed all hooks!");
 }

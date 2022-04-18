@@ -43,7 +43,7 @@ MAKE_HOOK_MATCH(LeaderboardDidActivate, &PlatformLeaderboardViewController::DidA
         });
         getLogger().info("Created View Results UIButton.");
         auto rect = reinterpret_cast<UnityEngine::RectTransform *>(resultsButton->get_transform());
-        rect->set_anchoredPosition({-17, -27});
+        rect->set_anchoredPosition({-47.3, -27});
         getLogger().info("Set the anchoredPosition of the View Results UIButton.");
         resultsButton->set_interactable(false);
         getLogger().info("Set View Results UIButton to be uninteractable.");
@@ -52,17 +52,17 @@ MAKE_HOOK_MATCH(LeaderboardDidActivate, &PlatformLeaderboardViewController::DidA
     LeaderboardDidActivate(self, firstActivation, addedToHierarchy, screenSystemEnabling);
 }
 
-MAKE_HOOK_MATCH(continueButtonPressed, &ResultsViewController::ContinueButtonPressed, void, ResultsViewController *self) {
+MAKE_HOOK_MATCH(AllowButtonClicks, &ResultsViewController::DidDeactivate, void, ResultsViewController *self, bool removedFromHierarchy, bool screenSystemDisabling) {
     resultsButton->set_interactable(true);
     getLogger().info("Set View Results UIButton to be interactable.");
 
-    continueButtonPressed(self);
+    AllowButtonClicks(self, removedFromHierarchy, screenSystemDisabling);
 }
 
 void TakeMeToResults::HookInstallers::PlatformLeaderboardViewController(Logger &logger) {
     INSTALL_HOOK(logger, LeaderboardDidActivate);
 }
 
-void TakeMeToResults::HookInstallers::ContinueButtonPressed(Logger &logger) {
-    INSTALL_HOOK(logger, continueButtonPressed);
+void TakeMeToResults::HookInstallers::ResultsViewController_DidDeactivate(Logger &logger) {
+    INSTALL_HOOK(logger, AllowButtonClicks);
 }

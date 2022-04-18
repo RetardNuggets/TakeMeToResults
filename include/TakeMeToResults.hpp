@@ -6,8 +6,8 @@ namespace TakeMeToResults
 {
     namespace HookInstallers
     {
-        void ResultsViewController(Logger &logger);
+        void ResultsViewController_ContinueButtonPressed(Logger &logger);
         void PlatformLeaderboardViewController(Logger &logger);
-        void ContinueButtonPressed(Logger &logger);
+        void ResultsViewController_DidDeactivate(Logger &logger);
     }
 }
