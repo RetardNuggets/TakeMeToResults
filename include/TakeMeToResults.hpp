@@ -9,5 +9,6 @@ namespace TakeMeToResults
         void ResultsViewController_ContinueButtonPressed(Logger &logger);
         void PlatformLeaderboardViewController(Logger &logger);
         void ResultsViewController_DidDeactivate(Logger &logger);
+        void LevelSelectionFlowCoordinator(Logger &logger);
     }
 }

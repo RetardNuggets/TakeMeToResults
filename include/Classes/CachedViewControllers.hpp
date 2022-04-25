@@ -1,6 +1,9 @@
 #pragma once
 
 #include "GlobalNamespace/ResultsViewController.hpp"
+#include "GlobalNamespace/LevelSelectionFlowCoordinator.hpp"
+#include "GlobalNamespace/SoloFreePlayFlowCoordinator.hpp"
+
 #include "HMUI/ViewController.hpp"
 
 using namespace GlobalNamespace;
@@ -14,6 +17,7 @@ class CachedViewControllers
     static ViewController *topScreenViewController;
     static ViewController *bottomScreenViewController;
     static ViewController *topViewController;
+    static SoloFreePlayFlowCoordinator *correctSelectedLevel;
     static void Init();
     static void Clear();
 };

@@ -4,7 +4,7 @@
   "info": {
     "name": "Take Me To Results",
     "id": "toResults",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "url": null,
     "additionalData": {
       "overrideSoName": "libtoResults.so"

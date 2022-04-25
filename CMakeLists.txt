@@ -3,6 +3,7 @@ include(qpm_defines.cmake)
 
 # override mod id
 set(MOD_ID "toResults")
+set(MOD_VERSION "1.0.2")
 
 # Enable link time optimization
 # In my experience, this can be highly unstable but it nets a huge size optimization and likely performance

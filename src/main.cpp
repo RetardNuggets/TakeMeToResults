@@ -36,5 +36,6 @@ extern "C" void load()
     TakeMeToResults::HookInstallers::ResultsViewController_ContinueButtonPressed(getLogger());
     TakeMeToResults::HookInstallers::PlatformLeaderboardViewController(getLogger());
     TakeMeToResults::HookInstallers::ResultsViewController_DidDeactivate(getLogger());
+    TakeMeToResults::HookInstallers::LevelSelectionFlowCoordinator(getLogger());
     getLogger().info("Installed all hooks!");
 }

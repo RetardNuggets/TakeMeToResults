@@ -1,6 +1,7 @@
 #include "Classes/CachedViewControllers.hpp"
 
 #include "GlobalNamespace/MainFlowCoordinator.hpp"
+
 #include "UnityEngine/Object.hpp"
 
 using namespace GlobalNamespace;
@@ -11,6 +12,7 @@ ViewController *CachedViewControllers::bottomScreenViewController;
 ViewController *CachedViewControllers::topScreenViewController;
 ViewController *CachedViewControllers::rightScreenViewController;
 ViewController *CachedViewControllers::leftScreenViewController;
+SoloFreePlayFlowCoordinator *CachedViewControllers::correctSelectedLevel;
 
 void CachedViewControllers::Init() {
     auto mainFlowCoordinator = Object::FindObjectOfType<MainFlowCoordinator *>();
@@ -28,4 +30,5 @@ void CachedViewControllers::Clear() {
     CachedViewControllers::topScreenViewController = nullptr;
     CachedViewControllers::rightScreenViewController = nullptr;
     CachedViewControllers::leftScreenViewController = nullptr;
+    CachedViewControllers::correctSelectedLevel = nullptr;
 }

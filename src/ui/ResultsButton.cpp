@@ -16,6 +16,7 @@
 #include "GlobalNamespace/ResultsViewController.hpp"
 #include "GlobalNamespace/PlatformLeaderboardViewController.hpp"
 #include "GlobalNamespace/SoloFreePlayFlowCoordinator.hpp"
+#include "GlobalNamespace/StandardLevelDetailView.hpp"
 
 using namespace GlobalNamespace;
 using namespace HMUI;
@@ -39,6 +40,13 @@ MAKE_HOOK_MATCH(LeaderboardDidActivate, &PlatformLeaderboardViewController::DidA
         {
             auto FreePlayCoord = UnityEngine::Object::FindObjectOfType<SoloFreePlayFlowCoordinator *>();
             auto SoloFreePlayCoordinator = FreePlayCoord->YoungestChildFlowCoordinatorOrSelf();
+            if(SoloFreePlayCoordinator != CachedViewControllers::correctSelectedLevel) {
+            getLogger().info("Trying to present correct level view.");
+            SoloFreePlayCoordinator->PresentFlowCoordinator(CachedViewControllers::correctSelectedLevel, NULL, ViewController::AnimationDirection::Horizontal, true, true);
+            getLogger().info("Presented correct level view.");
+            SoloFreePlayCoordinator = CachedViewControllers::correctSelectedLevel;
+            getLogger().info("Set flow coordinator to correct level view.");
+            }
             SoloFreePlayCoordinator->PresentViewController(CachedViewControllers::topViewController, il2cpp_utils::MakeDelegate<System::Action*>((std::function<void()>) [] { ShowOtherViewControllers(); }), ViewController::AnimationDirection::Vertical, false);
         });
         getLogger().info("Created View Results UIButton.");
