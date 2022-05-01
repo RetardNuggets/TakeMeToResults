@@ -8,6 +8,7 @@
 #include "GlobalNamespace/PlatformLeaderboardViewController.hpp"
 #include "GlobalNamespace/ResultsViewController.hpp"
 #include "HMUI/ViewController_AnimationDirection.hpp"
+#include "HMUI/ViewController_DidActivateDelegate.hpp"
 #include "System/Action.hpp"
 
 using namespace GlobalNamespace;
@@ -15,6 +16,7 @@ using namespace GlobalNamespace;
 static ModInfo modInfo;
 
 UnityEngine::UI::Button *resultsButton;
+bool suppressActivations = false;
 
 Logger &getLogger()
 {
@@ -45,18 +47,33 @@ MAKE_HOOK_MATCH(PlatformLeaderboardViewController_DidActivate, &PlatformLeaderbo
             static auto delegate = il2cpp_utils::MakeDelegate<System::Action *>((std::function<void()>) [] { CachedViewControllers::ShowViewControllers(); });
             if (CachedViewControllers::topViewController)
             {
+                suppressActivations = true;
                 flowCoordinator->PresentViewController(CachedViewControllers::topViewController, delegate, HMUI::ViewController::AnimationDirection::Vertical, false);
+                suppressActivations = false;
             }
         });
-        getLogger().info("Created View Results UIButton.");
         auto rect = reinterpret_cast<UnityEngine::RectTransform *>(resultsButton->get_transform());
         rect->set_anchoredPosition({-47.3, -27});
-        getLogger().info("Set the anchoredPosition of the View Results UIButton.");
         resultsButton->set_interactable(false);
-        getLogger().info("Set View Results UIButton to be uninteractable.");
     }
     
     PlatformLeaderboardViewController_DidActivate(self, firstActivation, addedToHierarchy, screenSystemEnabling);
+}
+
+MAKE_HOOK_MATCH(ViewController___Activate, &HMUI::ViewController::__Activate, void, HMUI::ViewController *self, bool addedToHierarchy, bool screenSystemEnabling)
+{
+    if (suppressActivations)
+    {
+        self->isActivated = true;
+        if (!self->get_gameObject()->get_activeSelf())
+        {
+            self->get_gameObject()->SetActive(true);
+        }
+    }
+    else
+    {
+        ViewController___Activate(self, addedToHierarchy, screenSystemEnabling);
+    }
 }
 
 extern "C" void setup(ModInfo &info)
@@ -76,5 +93,6 @@ extern "C" void load()
     getLogger().info("Installing hooks...");
     INSTALL_HOOK(getLogger(), ResultsViewController_ContinueButtonPressed);
     INSTALL_HOOK(getLogger(), PlatformLeaderboardViewController_DidActivate);
+    INSTALL_HOOK(getLogger(), ViewController___Activate);
     getLogger().info("Installed all hooks!");
 }
