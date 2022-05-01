@@ -41,7 +41,11 @@ MAKE_HOOK_MATCH(PlatformLeaderboardViewController_DidActivate, &PlatformLeaderbo
     if (firstActivation)
     {
         CachedViewControllers::Clear();
-        resultsButton = QuestUI::BeatSaberUI::CreateUIButton(self->get_transform(), "View Results", []()
+        auto canvas = QuestUI::BeatSaberUI::CreateCanvas();
+        canvas->get_transform()->SetParent(self->get_transform(), false);
+        canvas->get_transform()->set_localScale({1, 1, 1});
+        canvas->GetComponent<UnityEngine::RectTransform *>()->set_anchoredPosition({-25, 48});
+        resultsButton = QuestUI::BeatSaberUI::CreateUIButton(canvas, "View Last Results", UnityEngine::Vector2(0, 0), UnityEngine::Vector2(30, 10), []
         {
             auto flowCoordinator = UnityEngine::Object::FindObjectOfType<SoloFreePlayFlowCoordinator *>();
             static auto delegate = il2cpp_utils::MakeDelegate<System::Action *>((std::function<void()>) [] { CachedViewControllers::ShowViewControllers(); });
@@ -52,8 +56,6 @@ MAKE_HOOK_MATCH(PlatformLeaderboardViewController_DidActivate, &PlatformLeaderbo
                 suppressActivations = false;
             }
         });
-        auto rect = reinterpret_cast<UnityEngine::RectTransform *>(resultsButton->get_transform());
-        rect->set_anchoredPosition({-47.3, -27});
         resultsButton->set_interactable(false);
     }
     
